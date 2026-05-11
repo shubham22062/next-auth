@@ -5,14 +5,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
-
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // Credentials Login
   const handleLogin = async () => {
-
     const result = await signIn("credentials", {
       email,
       password,
@@ -27,9 +26,19 @@ export default function LoginPage() {
     router.push("/dashboard");
   };
 
-  return (
-    <div className="flex flex-col gap-4 p-10">
+  // GitHub Login
+  const handleGithubLogin = async () => {
+    await signIn("github", {
+      callbackUrl: "/dashboard",
+    });
+  };
 
+  return (
+    <div className="flex flex-col gap-4 p-10 max-w-sm mx-auto">
+
+      <h1 className="text-xl font-bold">Login</h1>
+
+      {/* Email */}
       <input
         type="email"
         placeholder="Email"
@@ -38,6 +47,7 @@ export default function LoginPage() {
         onChange={(e) => setEmail(e.target.value)}
       />
 
+      {/* Password */}
       <input
         type="password"
         placeholder="Password"
@@ -46,11 +56,22 @@ export default function LoginPage() {
         onChange={(e) => setPassword(e.target.value)}
       />
 
+      {/* Credentials Login */}
       <button
         onClick={handleLogin}
         className="bg-black text-white p-2"
       >
         Login
+      </button>
+
+      <hr />
+
+      {/* GitHub Login */}
+      <button
+        onClick={handleGithubLogin}
+        className="bg-gray-800 text-white p-2"
+      >
+        Login with GitHub
       </button>
     </div>
   );
