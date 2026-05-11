@@ -28,7 +28,8 @@ const handler = NextAuth({
                     id:"1",
                     name:"shubham",
                     email:"shubham@gmail.com",
-                    password: "12334834f"
+                    password: "12334834f",
+                    role: "admin"
                 };
 
                 if(credentials.email !== user.email){
@@ -43,6 +44,7 @@ const handler = NextAuth({
                     id:user.id,
                     name:user.name,
                     email:user.email,
+                    role:user.role,
                 }
                 
             }
@@ -51,6 +53,25 @@ const handler = NextAuth({
 
     session:{
         strategy:"jwt",
+    },
+
+    callbacks:{
+        async jwt({token , user}){
+            if(user){
+                token.id = user.id;
+                token.role = user.role;
+            }
+            return token;
+        },
+
+     async session({session,token}){
+        if(session.user){
+            session.user.id = token.id as string;
+            session.user.role = token.role as string
+        }
+        return session;
+     }
+
     },
 
     secret:process.env.NEXTAUTH_SECRET,
