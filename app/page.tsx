@@ -1,7 +1,15 @@
-import Image from "next/image";
+import { getServerSession } from "next-auth";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getServerSession();
+
   return (
-    <h1>This is my next app!!</h1>
+    <div>
+      {session?.user ? (
+        <pre>{JSON.stringify(session.user, null, 2)}</pre>
+      ) : (
+        <p>No user logged in</p>
+      )}
+    </div>
   );
 }
